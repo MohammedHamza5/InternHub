@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "688219837844",
+    "project_id": "intern-hub-355ee",
+    "storage_bucket": "intern-hub-355ee.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:688219837844:android:2ddcf0e862f0926e52eb81",
+        "android_client_info": {
+          "package_name": "com.eraa.internhub"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDI5ebskk9W3wmmy0Mw85DsnQ_xxOqX61s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
