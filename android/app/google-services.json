@@ -12,7 +12,20 @@
           "package_name": "com.eraa.internhub"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "688219837844-i9jdmt6lkuqnglfarlm0qb624ahu9nd1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.eraa.internhub",
+            "certificate_hash": "53f53c871ad59cecf207e8db9662f1bbeac534f5"
+          }
+        },
+        {
+          "client_id": "688219837844-ts6nrjnn2ihdvi6fl5oqeljdj3m41l36.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDI5ebskk9W3wmmy0Mw85DsnQ_xxOqX61s"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "688219837844-ts6nrjnn2ihdvi6fl5oqeljdj3m41l36.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "688219837844-5i1bfjbbcipjvsd0lohd5i36kcrvrkdj.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.eraa.internhub"
+              }
+            }
+          ]
         }
       }
     }

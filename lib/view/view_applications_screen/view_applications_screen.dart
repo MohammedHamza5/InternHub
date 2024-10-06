@@ -14,6 +14,7 @@ class ViewApplicationsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.lightGrayBackground,
       appBar: AppBar(
         title: const Text(
           'Submitted Resumes',
@@ -89,12 +90,13 @@ class ViewApplicationsScreen extends StatelessWidget {
         MaterialPageRoute(
           builder: (context) => Scaffold(
             appBar: AppBar(
-              title: const Text('PDF Viewer'),
+              title:  Text('PDF Viewer' , style: TextStyle(color: AppColors.white),),
               backgroundColor: AppColors.primaryBlue,
             ),
             body: PDFView(
               filePath: file.path,
             ),
+            backgroundColor: AppColors.lightGrayBackground,
           ),
         ),
       );

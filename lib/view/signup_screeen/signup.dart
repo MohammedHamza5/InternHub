@@ -272,9 +272,9 @@ class Signup extends StatelessWidget {
                                               BorderRadius.circular(14.r),
                                         ),
                                       ),
-                                      onPressed: () {
+                                      onPressed: () async {
                                         if (formKey.currentState!.validate()) {
-                                          AuthCubit.get(context)
+                                         await AuthCubit.get(context)
                                               .registerFromFirebase();
                                           Future.delayed(Duration.zero, () {
                                             AppNavigation.pushAndRemove(

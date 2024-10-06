@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../view_model/cubits/profile/profile_cubit.dart';
-import '../../../view_model/utils/app_navigation.dart';
+
 
 class GetUserName extends StatelessWidget {
   final String documentId;
@@ -14,13 +14,12 @@ class GetUserName extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     CollectionReference users = FirebaseFirestore.instance.collection('users');
-    final  profileCubit = context.read<ProfileCubit>();
+    final profileCubit = context.read<ProfileCubit>();
     final credential = FirebaseAuth.instance.currentUser;
 
     return FutureBuilder<DocumentSnapshot>(
       future: users.doc(documentId).get(),
-      builder:
-          (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+      builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
         if (snapshot.hasError) {
           return const Text("Something went wrong");
         }
@@ -30,8 +29,7 @@ class GetUserName extends StatelessWidget {
         }
 
         if (snapshot.connectionState == ConnectionState.done) {
-          Map<String, dynamic> data =
-          snapshot.data!.data() as Map<String, dynamic>;
+          Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
 
           return Column(
             children: [
@@ -45,7 +43,8 @@ class GetUserName extends StatelessWidget {
                       builder: (BuildContext context) {
                         return Dialog(
                           shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(11.r)),
+                            borderRadius: BorderRadius.circular(11.r),
+                          ),
                           child: Container(
                             padding: EdgeInsets.all(22.r),
                             height: 200.h,
@@ -63,13 +62,13 @@ class GetUserName extends StatelessWidget {
                                 TextButton(
                                   onPressed: () {
                                     if (credential != null) {
-                                      // تحديث الاسم في فايرستور
+                                      // Update name in Firestore
                                       users.doc(credential.uid).update({
                                         "name": profileCubit.editNameController.text,
                                       }).then((_) {
-                                        // إغلاق نافذة التعديل
-                                        AppNavigation.pop(context);
-                                        // تحديث حالة ProfileCubit لتحميل البيانات الجديدة
+                                        // Close the dialog
+                                        Navigator.of(context).pop();
+                                        // Update ProfileCubit state to reload data
                                         profileCubit.loadProfile();
                                       });
                                     }
@@ -78,8 +77,7 @@ class GetUserName extends StatelessWidget {
                                     "Edit",
                                     style: TextStyle(fontSize: 22.sp),
                                   ),
-                                )
-
+                                ),
                               ],
                             ),
                           ),
@@ -91,12 +89,12 @@ class GetUserName extends StatelessWidget {
                   color: Colors.black,
                 ),
                 leading: const Icon(Icons.person_outline_outlined),
-                title: Text("Name : ${data['name']}"),
+                title: Text("Name: ${data['name']}"),
               ),
               const Divider(),
               ListTile(
                 leading: const Icon(Icons.email_outlined),
-                title: Text("Email : ${data['email']}"),
+                title: Text("Email: ${data['email']}"),
               ),
             ],
           );

@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:internhub/view/profile_screen/widget/get_firebase.dart';
 import 'package:internhub/view/signin_screen/signin.dart';
 import 'package:internhub/view_model/cubits/profile/profile_cubit.dart';
@@ -234,9 +235,10 @@ class ProfileScreen extends StatelessWidget {
               child: const Text('Cancel'),
             ),
             TextButton(
-              onPressed: () {
+              onPressed: () async {
                 // Proceed with logout
-                AppNavigation.pushAndRemove(context, SignInPage());
+                await _signOutFromGoogle(); // Sign out from Google
+                AppNavigation.pushAndRemove(context, SignInPage()); // Navigate to sign in page
               },
               child: const Text('Log Out'),
             ),
@@ -244,5 +246,14 @@ class ProfileScreen extends StatelessWidget {
         );
       },
     );
+  }
+  Future<void> _signOutFromGoogle() async {
+    try {
+      final GoogleSignIn googleSignIn = GoogleSignIn();
+      await googleSignIn.signOut(); // Sign out from Google
+      print("Successfully signed out from Google"); // Confirm success
+    } catch (e) {
+      print("Error signing out from Google: $e"); // Handle errors
+    }
   }
 }

@@ -28,17 +28,24 @@ class SignInPage extends StatelessWidget {
                 key: formKey,
                 child: BlocConsumer<AuthCubit, AuthState>(
                   listener: (context, state) {
-                    if (state is LoginSuccess) {
-                      AppNavigation.pushAndRemove(context, const InternHubMainScreen());
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text("Login Successfully"),
-                        ),
-                      );
-                    } else if (state is LoginFailed) {
+                    if (state is LoginSuccess || state is GoogleSignInSuccess) {
+                      Future.delayed(Duration.zero, () {
+                        AppNavigation.pushAndRemove(
+                            context, const InternHubMainScreen());
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text("Login Successfully"),
+                          ),
+                        );
+                      });
+                    } else if (state is LoginFailed ||
+                        state is GoogleSignInFailed) {
+                      final errorMessage = state is LoginFailed
+                          ? state.errorMassage
+                          : (state as GoogleSignInFailed).errorMessage;
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          content: Text(state.errorMassage),
+                          content: Text(errorMessage),
                         ),
                       );
                     }
@@ -76,13 +83,14 @@ class SignInPage extends StatelessWidget {
                                 return 'Please enter your email';
                               }
                               if (!RegExp(
-                                  r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
+                                      r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
                                   .hasMatch(value)) {
                                 return 'Please enter a valid email';
                               }
                               return null;
                             },
-                            autovalidateMode: AutovalidateMode.onUserInteraction,
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
                             onTapOutside: (_) {
                               FocusManager.instance.primaryFocus!.unfocus();
                             },
@@ -115,14 +123,16 @@ class SignInPage extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 16.0),
                           child: TextFormField(
-                            controller: AuthCubit.get(context).passwordController,
+                            controller:
+                                AuthCubit.get(context).passwordController,
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return 'Please enter your password';
                               }
                               return null;
                             },
-                            autovalidateMode: AutovalidateMode.onUserInteraction,
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
                             onTapOutside: (_) {
                               FocusManager.instance.primaryFocus!.unfocus();
                             },
@@ -150,7 +160,8 @@ class SignInPage extends StatelessWidget {
                               ),
                               suffixIcon: IconButton(
                                 onPressed: () {
-                                  AuthCubit.get(context).togglePasswordVisibility();
+                                  AuthCubit.get(context)
+                                      .togglePasswordVisibility();
                                 },
                                 icon: Icon(
                                   AuthCubit.get(context).hidePassword
@@ -168,26 +179,27 @@ class SignInPage extends StatelessWidget {
                           child: state is LoginLoading
                               ? const CircularProgressIndicator()
                               : ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColors.green,
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 110.w, vertical: 14.h),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(14.r),
-                              ),
-                            ),
-                            onPressed: () {
-                              if (formKey.currentState!.validate()) {
-                                AuthCubit.get(context).signInFromFirebase();
-                              }
-                            },
-                            child: Text(
-                              'Sign In',
-                              style: TextStyle(
-                                  color: AppColors.white,
-                                  fontSize: 18.sp),
-                            ),
-                          ),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AppColors.green,
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 110.w, vertical: 14.h),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(14.r),
+                                    ),
+                                  ),
+                                  onPressed: () {
+                                    if (formKey.currentState!.validate()) {
+                                      AuthCubit.get(context)
+                                          .signInFromFirebase();
+                                    }
+                                  },
+                                  child: Text(
+                                    'Sign In',
+                                    style: TextStyle(
+                                        color: AppColors.white,
+                                        fontSize: 18.sp),
+                                  ),
+                                ),
                         ),
                         SizedBox(height: 20.h),
                         TextButton(
@@ -227,6 +239,32 @@ class SignInPage extends StatelessWidget {
                               ),
                             ),
                           ],
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: ElevatedButton.icon(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: AppColors.white,
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 16.0, vertical: 14.h),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(14.r),
+                              ),
+                            ),
+                            onPressed: () {
+                              AuthCubit.get(context).signInWithGoogle();
+                            },
+                            icon: Image.asset(
+                              AppAssets.googleLogo,
+                              height: 24.h,
+                              width: 24.w,
+                            ),
+                            label: Text(
+                              'Sign in with Google',
+                              style: TextStyle(
+                                  color: AppColors.black, fontSize: 16.sp),
+                            ),
+                          ),
                         ),
                       ],
                     );

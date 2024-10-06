@@ -66,17 +66,17 @@ class _InternHubMainScreenState extends State<InternHubMainScreen> {
                     Colors.green,
                     Colors.greenAccent,
                     Colors.blue,
-                  ], // تدرج الألوان حول الأيقونة
+                  ],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
               ),
               child: Center(
                 child: Container(
-                  width: 35.w, // حجم الدائرة البيضاء الداخلية
+                  width: 35.w,
                   height: 35.h,
                   decoration: const BoxDecoration(
-                    color: AppColors.lightGray, // خلفية بيضاء
+                    color: AppColors.lightGray,
                     shape: BoxShape.circle,
                   ),
                   child: Icon(

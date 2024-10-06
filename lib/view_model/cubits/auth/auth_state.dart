@@ -30,3 +30,12 @@ class LoginFailed extends AuthState {
 
 // State when password visibility is toggled
 class AppPasswordVisibilityChanged extends AuthState {}
+
+class GoogleSignInSuccess extends AuthState {}
+class  GoogleSignInLoading extends AuthState {}
+class GoogleSignInFailed extends AuthState {
+  final String errorMessage;
+  GoogleSignInFailed({
+    required this.errorMessage,
+  });
+}

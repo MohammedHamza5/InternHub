@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:internhub/view/internhub_main_screen/internhub_main_screen.dart';
@@ -14,10 +15,29 @@ class InternHub extends StatelessWidget {
       builder: (_, child) {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
-          home: child,
+          home: StreamBuilder<User?>(
+            stream: FirebaseAuth.instance.authStateChanges(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: Text("Loading..."),
+                );
+              } else if (snapshot.hasError) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text("Something went wrong"),
+                  ),
+                );
+                return const SizedBox();
+              } else if (snapshot.hasData) {
+                return const InternHubMainScreen();
+              } else {
+                return  SignInPage();
+              }
+            },
+          ),
         );
       },
-      child:   const InternHubMainScreen(),
     );
   }
 }

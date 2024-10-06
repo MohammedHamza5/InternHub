@@ -27,7 +27,6 @@ class ProfileCubit extends Cubit<ProfileState> {
         return;
       }
 
-      // نموذج لتحميل البيانات من Firestore
       final userDoc = await FirebaseFirestore.instance
           .collection('users')
           .doc(currentUser!.uid)
@@ -35,7 +34,7 @@ class ProfileCubit extends Cubit<ProfileState> {
 
       if (userDoc.exists) {
         final name = userDoc['name'] ?? 'User123';
-        editNameController.text = name; // تحديث الـ TextEditingController
+        editNameController.text = name;
         emit(ProfileLoaded(image: userDoc['image'], name: name));
       } else {
         emit(ProfileLoaded(image: null, name: 'User123'));
@@ -72,8 +71,7 @@ class ProfileCubit extends Cubit<ProfileState> {
   Future<void> pickProfileImage() async {
     final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
-      imgPath = File(pickedFile.path);  // حفظ مسار الصورة
-      // استدعاء الميثود لرفع الصورة
+      imgPath = File(pickedFile.path);
       await uploadProfileImage();
     }
   }
@@ -84,22 +82,19 @@ class ProfileCubit extends Cubit<ProfileState> {
         final storageRef = _firebaseStorage.ref('profile_images/${currentUser!.uid}/${DateTime.now().toIso8601String()}');
         final uploadTask = storageRef.putFile(imgPath!);
 
-        // إظهار مؤشر تحميل
-        emit(ProfileLoading());
-
         final snapshot = await uploadTask.whenComplete(() {});
         final downloadUrl = await snapshot.ref.getDownloadURL();
 
-        // تحديث حقل image في Firestore باستخدام رابط التنزيل
         await FirebaseFirestore.instance
             .collection('users')
             .doc(currentUser!.uid)
             .update({'image': downloadUrl});
 
-        // تحديث الحالة في Cubit
-        emit(state is ProfileLoaded
-            ? (state as ProfileLoaded).copyWith(image: downloadUrl)
-            : ProfileLoaded(image: downloadUrl, name: editNameController.text));
+        if (state is ProfileLoaded) {
+          emit((state as ProfileLoaded).copyWith(image: downloadUrl));
+        } else {
+          emit(ProfileLoaded(image: downloadUrl, name: editNameController.text));
+        }
       } catch (e) {
         emit(ProfileError('Failed to upload image: ${e.toString()}'));
       }
@@ -109,7 +104,7 @@ class ProfileCubit extends Cubit<ProfileState> {
 
   @override
   Future<void> close() {
-    editNameController.dispose(); // تنظيف TextEditingController
+    editNameController.dispose();
     return super.close();
   }
 }
