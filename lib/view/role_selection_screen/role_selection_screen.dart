@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../model/user_service.dart';
+import '../../model/user_service/user_service.dart';
 import '../../view/internhub_main_screen/internhub_main_screen.dart';
 import 'package:internhub/view_model/utils/app_navigation.dart';
 import '../../view_model/utils/app_colors.dart';

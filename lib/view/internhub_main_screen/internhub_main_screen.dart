@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:internhub/view/my_intern_page/my_intern_page.dart';
-import '../../model/user_service.dart';
+import '../../model/user_service/user_service.dart';
 import '../../view_model/utils/app_colors.dart';
 import '../add_intern_screen/add_intern_screen.dart';
 import '../applications_screen/applications_screen.dart';
