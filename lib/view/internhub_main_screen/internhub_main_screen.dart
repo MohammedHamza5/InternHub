@@ -22,6 +22,7 @@ class InternHubMainScreen extends StatefulWidget {
 class _InternHubMainScreenState extends State<InternHubMainScreen> {
   int _selectedIndex = 0;
   late List<Widget> _pages;
+  late List<BottomNavigationBarItem> _navItems;
   String? userRole;
   bool isLoading = true;
 
@@ -31,24 +32,17 @@ class _InternHubMainScreenState extends State<InternHubMainScreen> {
     _fetchUserRole();
   }
 
-
-
   Future<void> _fetchUserRole() async {
     try {
-      // الحصول على المستخدم الحالي
       User? user = FirebaseAuth.instance.currentUser;
-print(user);
       if (user != null) {
         final uid = user.uid;
-        print("Fetching user role...");
         final role = await UserService.getUserRole(uid);
-         print(role);
         setState(() {
           userRole = role;
           isLoading = false;
         });
       } else {
-        print('Error: User not authenticated');
         throw Exception('User not authenticated');
       }
     } catch (e) {
@@ -74,73 +68,129 @@ print(user);
       );
     }
 
-    _pages = [
-      const InternshipsPage(),
-      const NotificationsScreen(),
-      if (userRole == 'company') const AddInternScreen(),
-      if (userRole == 'company') const MyInternPage(),
-      if (userRole == 'student')  MyApplicationsScreen(),
-      ProfileScreen(user: widget.user),
-    ];
+    // بناء القوائم بناءً على دور المستخدم
+    if (userRole == 'company') {
+      _pages = [
+        const InternshipsPage(),
+        const NotificationsScreen(),
+        const AddInternScreen(),
+        const MyInternPage(),
+        ProfileScreen(user: widget.user),
+      ];
+
+      _navItems = [
+        const BottomNavigationBarItem(
+          icon: Icon(Icons.home),
+          label: 'Home',
+        ),
+        const BottomNavigationBarItem(
+          icon: Icon(Icons.notifications_active),
+          label: 'Notifications',
+        ),
+        BottomNavigationBarItem(
+          icon: Container(
+            width: 45.w,
+            height: 45.h,
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              gradient: LinearGradient(
+                colors: [
+                  Colors.green,
+                  Colors.greenAccent,
+                  Colors.blue,
+                ],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+            ),
+            child: Center(
+              child: Container(
+                width: 35.w,
+                height: 35.h,
+                decoration: const BoxDecoration(
+                  color: AppColors.lightGray,
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  Icons.add,
+                  size: 25.sp,
+                  color: Colors.black,
+                ),
+              ),
+            ),
+          ),
+          label: '',
+        ),
+        const BottomNavigationBarItem(
+          icon: Icon(Icons.account_balance_sharp),
+          label: 'My Internship',
+        ),
+        const BottomNavigationBarItem(
+          icon: Icon(Icons.person),
+          label: 'Profile',
+        ),
+      ];
+    } else if (userRole == 'student') {
+      _pages = [
+        const InternshipsPage(),
+        const NotificationsScreen(),
+        MyApplicationsScreen(),
+        ProfileScreen(user: widget.user),
+      ];
+
+      _navItems = [
+        const BottomNavigationBarItem(
+          icon: Icon(Icons.home),
+          label: 'Home',
+        ),
+        const BottomNavigationBarItem(
+          icon: Icon(Icons.notifications_active),
+          label: 'Notifications',
+        ),
+        const BottomNavigationBarItem(
+          icon: Icon(Icons.account_balance_sharp),
+          label: 'My Applications',
+        ),
+        const BottomNavigationBarItem(
+          icon: Icon(Icons.person),
+          label: 'Profile',
+        ),
+      ];
+    } else {
+      // حالة افتراضية إذا لم يكن الدور 'company' أو 'student'
+      _pages = [
+        const InternshipsPage(),
+        const NotificationsScreen(),
+        ProfileScreen(user: widget.user),
+      ];
+
+      _navItems = [
+        const BottomNavigationBarItem(
+          icon: Icon(Icons.home),
+          label: 'Home',
+        ),
+        const BottomNavigationBarItem(
+          icon: Icon(Icons.notifications_active),
+          label: 'Notifications',
+        ),
+        const BottomNavigationBarItem(
+          icon: Icon(Icons.person),
+          label: 'Profile',
+        ),
+      ];
+    }
+
+    // التأكد من أن _selectedIndex لا يتجاوز طول _pages
+    if (_selectedIndex >= _pages.length) {
+      _selectedIndex = 0;
+    }
 
     return Scaffold(
       backgroundColor: AppColors.lightGrayBackground,
       body: _pages[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: AppColors.primaryBlue,
-        items: <BottomNavigationBarItem>[
-          const BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          const BottomNavigationBarItem(
-            icon: Icon(Icons.notifications_active),
-            label: 'Notifications',
-          ),
-          if (userRole == "company")
-            BottomNavigationBarItem(
-              icon: Container(
-                width: 45.w,
-                height: 45.h,
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                  gradient: LinearGradient(
-                    colors: [
-                      Colors.green,
-                      Colors.greenAccent,
-                      Colors.blue,
-                    ],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                ),
-                child: Center(
-                  child: Container(
-                    width: 35.w,
-                    height: 35.h,
-                    decoration: const BoxDecoration(
-                      color: AppColors.lightGray,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Icon(
-                      Icons.add,
-                      size: 25.sp,
-                      color: Colors.black,
-                    ),
-                  ),
-                ),
-              ),
-              label: '',
-            ),
-          const BottomNavigationBarItem(
-            icon: Icon(Icons.account_balance_sharp),
-               label: 'My Internship',
-          ),
-          const BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
-          ),
-        ],
+        items: _navItems,
         currentIndex: _selectedIndex,
         selectedItemColor: AppColors.primaryGreen,
         unselectedItemColor: AppColors.secondaryTextColor,

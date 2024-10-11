@@ -3,8 +3,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import '../../../view_model/cubits/profile/profile_cubit.dart';
-
+import '../../../view_model/utils/app_navigation.dart';
+import '../../signin_screen/signin.dart';
 
 class GetUserName extends StatelessWidget {
   final String documentId;
@@ -19,7 +21,8 @@ class GetUserName extends StatelessWidget {
 
     return FutureBuilder<DocumentSnapshot>(
       future: users.doc(documentId).get(),
-      builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+      builder:
+          (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
         if (snapshot.hasError) {
           return const Text("Something went wrong");
         }
@@ -29,7 +32,8 @@ class GetUserName extends StatelessWidget {
         }
 
         if (snapshot.connectionState == ConnectionState.done) {
-          Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
+          Map<String, dynamic> data =
+              snapshot.data!.data() as Map<String, dynamic>;
 
           return Column(
             children: [
@@ -64,7 +68,8 @@ class GetUserName extends StatelessWidget {
                                     if (credential != null) {
                                       // Update name in Firestore
                                       users.doc(credential.uid).update({
-                                        "name": profileCubit.editNameController.text,
+                                        "name": profileCubit
+                                            .editNameController.text,
                                       }).then((_) {
                                         // Close the dialog
                                         Navigator.of(context).pop();
@@ -96,11 +101,64 @@ class GetUserName extends StatelessWidget {
                 leading: const Icon(Icons.email_outlined),
                 title: Text("Email: ${data['email']}"),
               ),
+              const Divider(),
+              ListTile(
+                leading: const Icon(Icons.output_rounded),
+                title: InkWell(
+                  onTap: () {
+                    _showLogoutConfirmationDialog(context);
+                  },
+                  child: Text(
+                    "Sign Out",
+                  ),
+                ),
+              ),
+              const Divider(),
             ],
           );
         }
         return const CircularProgressIndicator();
       },
     );
+  }
+}
+
+void _showLogoutConfirmationDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text('Logout Confirmation'),
+        content: const Text('Are you sure you want to log out?'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.of(context)
+                  .pop(); // Close the dialog without logging out
+            },
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () async {
+              // Proceed with logout
+              await _signOutFromGoogle(); // Sign out from Google
+              AppNavigation.pushAndRemove(
+                  context, SignInScreen()); // Navigate to sign in page
+            },
+            child: const Text('Log Out'),
+          ),
+        ],
+      );
+    },
+  );
+}
+
+Future<void> _signOutFromGoogle() async {
+  try {
+    final GoogleSignIn googleSignIn = GoogleSignIn();
+    await googleSignIn.signOut(); // Sign out from Google
+    print("Successfully signed out from Google"); // Confirm success
+  } catch (e) {
+    print("Error signing out from Google: $e"); // Handle errors
   }
 }

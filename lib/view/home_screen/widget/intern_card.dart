@@ -19,6 +19,7 @@ class InternshipCard extends StatelessWidget {
       child: Card(
         color: AppColors.cardBackground,
         margin: EdgeInsets.symmetric(horizontal: 10.w, vertical: 5.h),
+        elevation: 12,
         child: Padding(
           padding: EdgeInsets.all(10.w),
           child: Column(

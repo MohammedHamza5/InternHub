@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../model/internship_model/internship.dart';
 import '../../view_model/utils/app_colors.dart';
 import '../../view_model/utils/app_navigation.dart';
@@ -85,7 +86,9 @@ class MyApplicationsScreen extends StatelessWidget {
                       Internship.fromDocument(internshipSnapshot.data!);
 
                   return Card(
-                    margin: EdgeInsets.all(8.0),
+                    color: AppColors.cardBackground,
+                    margin: EdgeInsets.symmetric(horizontal: 15.w, vertical: 10.h),
+                    elevation: 12,
                     child: ListTile(
                       title: Text(internship.title),
                       subtitle: Column(

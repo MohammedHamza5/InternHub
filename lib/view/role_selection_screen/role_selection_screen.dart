@@ -74,7 +74,7 @@ class _RoleSelectionScreenState extends State<RoleSelectionScreen> {
                       ),
                       Expanded(
                         child: RadioListTile<UserRole>(
-                          title: const Text('Company', style: TextStyle(color: Colors.white)),
+                          title:  Text('Company', style: TextStyle(color: Colors.white,fontSize : 15.sp,fontWeight: FontWeight.bold)),
                           value: UserRole.company,
                           groupValue: selectedRole,
                           activeColor: AppColors.primaryGreen,
@@ -140,34 +140,39 @@ class _RoleSelectionScreenState extends State<RoleSelectionScreen> {
                       },
                     ),
                   const Spacer(),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primaryGreen,
-                      padding: EdgeInsets.symmetric(
-                        vertical: 12.h,
-                        horizontal: 24.w,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primaryGreen,
+                        padding: EdgeInsets.symmetric(
+                          vertical: 12.h,
+                          horizontal: 24.w,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                       ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                    onPressed: () async {
-                      if (_formKey.currentState!.validate() && selectedRole != null) {
-                        try {
-                          await _updateUserData();
-                          await AppNavigation.pushAndRemove(context, const InternHubMainScreen());
-                        } catch (e) {
+                      onPressed: () async {
+                        if (_formKey.currentState!.validate() && selectedRole != null) {
+                          try {
+                            await _updateUserData();
+                            await AppNavigation.pushAndRemove(context, const InternHubMainScreen());
+                          } catch (e) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('Error: ${e.toString()}')),
+                            );
+                          }
+                        } else if (selectedRole == null) {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('Error: ${e.toString()}')),
+                            const SnackBar(content: Text('Please select a role')),
                           );
                         }
-                      } else if (selectedRole == null) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Please select a role')),
-                        );
-                      }
-                    },
-                    child: const Text('Continue', style: TextStyle(fontSize: 18)),
+                      },
+                      child: const Text('Continue', style: TextStyle(fontSize: 18 , color: AppColors.black)),
+                    ),
+                    ],
                   ),
                 ],
               ),

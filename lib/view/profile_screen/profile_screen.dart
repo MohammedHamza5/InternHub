@@ -26,7 +26,8 @@ class ProfileScreen extends StatelessWidget {
         appBar: AppBar(
           title: const Text(
             'Profile',
-            style: TextStyle(color: AppColors.white, fontWeight: FontWeight.w400),
+            style:
+                TextStyle(color: AppColors.white, fontWeight: FontWeight.w400),
           ),
           backgroundColor: AppColors.primaryBlue,
           actions: [
@@ -34,7 +35,8 @@ class ProfileScreen extends StatelessWidget {
               onPressed: () {
                 _showLogoutConfirmationDialog(context);
               },
-              icon: const Icon(Icons.logout, size: 24.0, color: AppColors.white),
+              icon:
+                  const Icon(Icons.logout, size: 24.0, color: AppColors.white),
             ),
           ],
         ),
@@ -56,10 +58,10 @@ class ProfileScreen extends StatelessWidget {
                           backgroundColor: AppColors.darkGray,
                           backgroundImage: state.image != null
                               ? NetworkImage(state.image!)
-                              : const AssetImage('assets/images/default_profile.png') as ImageProvider,
-                          child: state.image == null
-                          ? null
-                              : null,
+                              : const AssetImage(
+                                      'assets/images/default_profile.png')
+                                  as ImageProvider,
+                          child: state.image == null ? null : null,
                         ),
                         Positioned(
                           bottom: 8,
@@ -74,7 +76,9 @@ class ProfileScreen extends StatelessWidget {
                                 color: AppColors.white,
                               ),
                               onPressed: () async {
-                                await context.read<ProfileCubit>().pickProfileImage();
+                                await context
+                                    .read<ProfileCubit>()
+                                    .pickProfileImage();
                               },
                             ),
                           ),
@@ -92,14 +96,17 @@ class ProfileScreen extends StatelessWidget {
                           context: context,
                           builder: (context) => AlertDialog(
                             title: const Text('Confirm Deletion'),
-                            content: const Text('Are you sure you want to delete your account?'),
+                            content: const Text(
+                                'Are you sure you want to delete your account?'),
                             actions: [
                               TextButton(
-                                onPressed: () => Navigator.of(context).pop(false),
+                                onPressed: () =>
+                                    Navigator.of(context).pop(false),
                                 child: const Text('Cancel'),
                               ),
                               TextButton(
-                                onPressed: () => Navigator.of(context).pop(true),
+                                onPressed: () =>
+                                    Navigator.of(context).pop(true),
                                 child: const Text('Delete'),
                               ),
                             ],
@@ -161,7 +168,10 @@ class ProfileScreen extends StatelessWidget {
       await user.delete();
 
       // حذف بيانات المستخدم من Firestore
-      await FirebaseFirestore.instance.collection('users').doc(user.uid).delete();
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .delete();
 
       // تسجيل الخروج وتوجيه المستخدم إلى شاشة تسجيل الدخول
       await auth.signOut();
@@ -171,7 +181,8 @@ class ProfileScreen extends StatelessWidget {
       if (e is FirebaseAuthException) {
         switch (e.code) {
           case 'user-mismatch':
-            errorMessage = 'The provided credentials do not match the current user.';
+            errorMessage =
+                'The provided credentials do not match the current user.';
             break;
           case 'wrong-password':
             errorMessage = 'The password is incorrect. Please try again.';
@@ -212,7 +223,8 @@ class ProfileScreen extends StatelessWidget {
             ),
             TextButton(
               child: const Text('OK'),
-              onPressed: () => Navigator.of(context).pop(passwordController.text),
+              onPressed: () =>
+                  Navigator.of(context).pop(passwordController.text),
             ),
           ],
         );
@@ -230,7 +242,8 @@ class ProfileScreen extends StatelessWidget {
           actions: <Widget>[
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog without logging out
+                Navigator.of(context)
+                    .pop(); // Close the dialog without logging out
               },
               child: const Text('Cancel'),
             ),
@@ -238,7 +251,8 @@ class ProfileScreen extends StatelessWidget {
               onPressed: () async {
                 // Proceed with logout
                 await _signOutFromGoogle(); // Sign out from Google
-                AppNavigation.pushAndRemove(context, SignInScreen()); // Navigate to sign in page
+                AppNavigation.pushAndRemove(
+                    context, SignInScreen()); // Navigate to sign in page
               },
               child: const Text('Log Out'),
             ),
@@ -247,6 +261,7 @@ class ProfileScreen extends StatelessWidget {
       },
     );
   }
+
   Future<void> _signOutFromGoogle() async {
     try {
       final GoogleSignIn googleSignIn = GoogleSignIn();
