@@ -101,7 +101,6 @@ class ProfileCubit extends Cubit<ProfileState> {
     }
   }
 
-
   @override
   Future<void> close() {
     editNameController.dispose();

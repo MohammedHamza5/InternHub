@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:internhub/view/internhub_main_screen/internhub_main_screen.dart';
+import 'package:internhub/view/role_selection_screen/role_selection_screen.dart';
 import 'package:internhub/view/signin_screen/signin.dart';
 
 class InternHub extends StatelessWidget {
@@ -30,9 +31,9 @@ class InternHub extends StatelessWidget {
                 );
                 return const SizedBox();
               } else if (snapshot.hasData) {
-                return const InternHubMainScreen();
+                return  InternHubMainScreen();
               } else {
-                return  SignInPage();
+                return  SignInScreen();
               }
             },
           ),

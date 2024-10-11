@@ -7,11 +7,9 @@ import '../../view_model/cubits/auth/auth_cubit.dart';
 import '../../view_model/utils/app_assets.dart';
 import '../../view_model/utils/app_navigation.dart';
 
-class Signup extends StatelessWidget {
+class SignupScreen extends StatelessWidget {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-
-  Signup({super.key});
-
+  SignupScreen({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -274,14 +272,20 @@ class Signup extends StatelessWidget {
                                       ),
                                       onPressed: () async {
                                         if (formKey.currentState!.validate()) {
-                                         await AuthCubit.get(context)
+                                          await AuthCubit.get(context)
                                               .registerFromFirebase();
                                           Future.delayed(Duration.zero, () {
                                             AppNavigation.pushAndRemove(
                                               context,
-                                              SignInPage(),
+                                              SignInScreen(),
                                             );
                                           });
+                                          // if (_selectedRole == null) {
+                                          //   ScaffoldMessenger.of(context).showSnackBar(
+                                          //     SnackBar(content: Text('Please select a role')),
+                                          //   );
+                                          //   return;
+                                          // }
                                         }
                                       },
                                       child: Text(
@@ -306,7 +310,7 @@ class Signup extends StatelessWidget {
                                 TextButton(
                                   onPressed: () {
                                     AppNavigation.navigateTo(
-                                        context, SignInPage());
+                                        context, SignInScreen());
                                   },
                                   child: Text(
                                     'SignIn',

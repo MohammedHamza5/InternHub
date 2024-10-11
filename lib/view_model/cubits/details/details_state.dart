@@ -8,14 +8,22 @@ abstract class DetailsState extends Equatable {
 class DetailsInitial extends DetailsState {}
 
 class DetailsLoading extends DetailsState {}
+class UserRole extends Equatable {
+  final String? role;
 
-class DetailsLoaded extends DetailsState {
-  final String downloadURL;
-
-  DetailsLoaded(this.downloadURL);
+  UserRole({this.role});
 
   @override
-  List<Object> get props => [downloadURL];
+  List<Object?> get props => [role];
+}
+class DetailsLoaded extends DetailsState {
+  final String? downloadURL;
+  final UserRole? userRole;
+
+  DetailsLoaded({this.downloadURL, this.userRole});
+
+  @override
+  List<Object> get props => [downloadURL ?? "", userRole ?? ''];
 }
 
 class DetailsError extends DetailsState {

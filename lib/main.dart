@@ -13,6 +13,6 @@ void main() async {
   runApp(
       BlocProvider(
           create: (context) => InternshipsCubit(),
-      child :const InternHub())
+      child :const InternHub()),
   );
 }

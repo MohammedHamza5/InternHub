@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:internhub/view_model/utils/app_colors.dart'; // استدعاء كلاس الألوان
+import 'package:internhub/view_model/utils/app_colors.dart';
 import '../../model/internship_model/internship.dart';
 import '../../view_model/cubits/addInternship/add_internship_cubit.dart';
 import '../../view_model/cubits/addInternship/add_internship_state.dart';
@@ -10,7 +10,6 @@ import '../internhub_main_screen/internhub_main_screen.dart';
 
 class AddInternScreen extends StatefulWidget {
   final Internship? internship;
-
   const AddInternScreen({super.key, this.internship});
 
   @override
@@ -45,7 +44,6 @@ class _AddInternScreenState extends State<AddInternScreen> {
   void _saveInternship(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
       final uid = FirebaseAuth.instance.currentUser!.uid;
-
       final internship = widget.internship?.copyWith(
         title: _titleController.text,
         company: _companyController.text,
@@ -130,7 +128,7 @@ class _AddInternScreenState extends State<AddInternScreen> {
                   ),
                   SizedBox(height: 20.h),
                   TextFormField(
-                    controller: _countryController,
+                    controller: _countryController..text = 'Egypt', // Default value
                     decoration: const InputDecoration(labelText: 'Country'),
                     validator: (value) {
                       if (value == null || value.isEmpty) {

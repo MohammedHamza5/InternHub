@@ -66,7 +66,6 @@ class InternshipsCubit extends Cubit<InternshipsState> {
   }
 
 
-
   void filterInternships(String query) {
     if (query.isEmpty) {
       emit(InternshipsLoaded(allInternships));
@@ -102,9 +101,6 @@ class InternshipsCubit extends Cubit<InternshipsState> {
       }
     }
   }
-
-
-
 
   Future<List<Internship>> _fetchUserInternships(String userId) async {
     try {

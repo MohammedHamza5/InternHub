@@ -32,7 +32,7 @@ class ProfileScreen extends StatelessWidget {
           actions: [
             IconButton(
               onPressed: () {
-                _showLogoutConfirmationDialog(context);  // استدعاء دالة لعرض رسالة التأكيد
+                _showLogoutConfirmationDialog(context);
               },
               icon: const Icon(Icons.logout, size: 24.0, color: AppColors.white),
             ),
@@ -165,7 +165,7 @@ class ProfileScreen extends StatelessWidget {
 
       // تسجيل الخروج وتوجيه المستخدم إلى شاشة تسجيل الدخول
       await auth.signOut();
-      AppNavigation.pushAndRemove(context, SignInPage());
+      AppNavigation.pushAndRemove(context, SignInScreen());
     } catch (e) {
       String errorMessage;
       if (e is FirebaseAuthException) {
@@ -238,7 +238,7 @@ class ProfileScreen extends StatelessWidget {
               onPressed: () async {
                 // Proceed with logout
                 await _signOutFromGoogle(); // Sign out from Google
-                AppNavigation.pushAndRemove(context, SignInPage()); // Navigate to sign in page
+                AppNavigation.pushAndRemove(context, SignInScreen()); // Navigate to sign in page
               },
               child: const Text('Log Out'),
             ),

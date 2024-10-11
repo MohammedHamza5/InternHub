@@ -100,7 +100,9 @@ class MyInternPage extends StatelessWidget {
                                               MaterialPageRoute(
                                                 builder: (context) =>
                                                     AddInternScreen(
-                                                        internship: internship),
+                                                        internship: internship
+
+                                                    ),
                                               ),
                                             );
                                           },
